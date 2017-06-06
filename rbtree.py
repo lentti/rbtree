@@ -52,9 +52,13 @@ class RBT:
     def __init__(self):
         self.nil=Node(key=None)
         self.root=self.nil
+        self.nil.color='b'
 
     def insert(self,key):
-        self.insert_node(Node(key))
+        tempnode=Node(key)
+        tempnode.left=self.nil
+        tempnode.right=self.nil
+        self.insert_node(tempnode)
 
     def insert_node(self,z):
         y=self.nil
@@ -87,7 +91,7 @@ class RBT:
         for i in range(level):
             print('\t', end='')
         print(tree.key,end='')
-        print(tree.color)
+        print(tree.color,str(level))
         if tree.left is not self.nil:
             self.print(tree.left, level + 1)
 
@@ -147,10 +151,10 @@ class RBT:
             y.p=x.p
             if x.p==self.nil:
                 self.root =y
-            elif x==x.p.right:
-                x.p.right=y
-            else:
+            elif x==x.p.left:
                 x.p.left=y
+            else:
+                x.p.right=y
             y.right=x
             x.p=y
 
@@ -182,12 +186,6 @@ class RBT:
             x = x.left
         return x
 
-    # def maximum(self, x=None):
-    #     if None == x:
-    #         x = self.root
-    #     while x.right != self.nil:
-    #         x = x.right
-    #     return x
 
     def delete(self,z):
         y=z
@@ -199,7 +197,7 @@ class RBT:
             x=z.left
             self.transplant(z,z.left)
         else:
-            y=self.minimum(y.right)
+            y=self.minimum(z.right)
             yorigcolor=y.color
             x=y.right
             if y.p ==z:
@@ -218,7 +216,7 @@ class RBT:
     def delete_fix(self,x):
         if x is self.nil:
             return
-        while x is not self.root and x.color is 'b':
+        while x != self.root and x.color == 'b':
             if x==x.p.left:
                 w=x.p.right
                 if w.color =='r':
@@ -242,18 +240,18 @@ class RBT:
                     x=self.root
             else:
                 w=x.p.left
-                if w.color =='l':
+                if w.color =='r':
                     w.color='b'
-                    x.p.color='l'
+                    x.p.color='r'
                     self.rotate(x.p,'r')
                     w=x.p.left
-                if w.right.color is 'b' and w.left.color is 'b':
-                    w.color = 'l'
+                if w.left.color is 'b' and w.right.color is 'b':
+                    w.color = 'r'
                     x=x.p
                 else:
                     if w.left.color =='b':
                         w.right.color ='b'
-                        w.color='l'
+                        w.color='r'
                         self.rotate(w,'l')
                         w=x.p.left
                     w.color=x.p.color
@@ -315,7 +313,7 @@ class RBT:
         while tree is not self.nil:
             if tree.color is 'b':
                 cnt+=1
-            tree=tree.left
+            tree=tree.right
         return cnt
 
 
@@ -325,10 +323,7 @@ def main():
     f = open("input.txt", 'r')
     lines = f.readlines()
     rbt=RBT()
-    cnt=0
     for line in lines:
-        print(cnt)
-        cnt+=1
         number=int(line)
         # print(number)
         if number > 0:
@@ -341,7 +336,7 @@ def main():
                 rbt.delete(tempnode)
         elif number ==0:
             break
-    rbt.print()
+    # rbt.print()
     print('total = ' + str(rbt.get_total()))
     print('nb = ' + str(rbt.get_nb()))
     print('bh = ' + str(rbt.get_bh()))
@@ -351,3 +346,12 @@ def main():
     
 if __name__ == '__main__':
     main()
+
+    # rbt=RBT()
+    # rbt.insert(2)
+    # rbt.insert(1)
+    # rbt.insert(5)
+    # rbt.insert(3)
+    # rbt.print()
+    # rbt.delete(rbt.search(5))
+    # rbt.print()
