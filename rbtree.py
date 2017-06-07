@@ -54,6 +54,9 @@ class RBT:
         self.root=self.nil
         self.nil.color='b'
 
+    def __len__(self):  return self.nil.color
+    def __contains__(self,item):    return self.search(item) is not self.nil
+
     def insert(self,key):
         tempnode=Node(key)
         tempnode.left=self.nil
@@ -170,7 +173,7 @@ class RBT:
             v.p=u.p
 
     def search(self, key, x = None):
-        if None == x:
+        if None is x:
             x = self.root
         while x != self.nil and key != x.key:
             if key < x.key:
@@ -180,14 +183,16 @@ class RBT:
         return x
 
     def minimum(self, x=None):
-        if None == x:
+        if None is x:
             x = self.root
         while x.left != self.nil:
             x = x.left
         return x
 
-
     def delete(self,z):
+        self.deleteNode(self.search(z))
+        
+    def deleteNode(self,z):
         y=z
         yorigcolor=y.color
         if z.left == self.nil:
@@ -261,6 +266,9 @@ class RBT:
                     x=self.root
         x.color ='b'
 
+
+    def __len__(self):  return self.get_total()
+
     def get_total(self,tree=None):
         if tree is None:
             tree=self.root
@@ -286,7 +294,7 @@ class RBT:
                 tree=tree.left
             else:
                 tree=stk.pop()
-                print(tree.key)
+                print(tree.key, tree.color.upper())
                 tree=tree.right
         print('')
 
@@ -320,24 +328,35 @@ class RBT:
 
 
 def main():
-    f = open("input.txt", 'r')
+    filename='test01.txt'
+    f = open(filename, 'r')
     lines = f.readlines()
     rbt=RBT()
+    insert=0
+    delete=0
+    miss=0
     for line in lines:
         number=int(line)
         # print(number)
         if number > 0:
             rbt.insert(number)
+            insert+=1
         elif number < 0:
-            tempnode=rbt.search(-1*number)
-            if tempnode is rbt.nil:
-                print("No such Node! ( %d )" % (-1*number))
+            number*=-1
+            if number in rbt:
+                rbt.delete(number)
+                delete+=1
             else:
-                rbt.delete(tempnode)
+                print("No such Node! ( %d )" % (number))
+                miss+=1
         elif number ==0:
             break
     # rbt.print()
-    print('total = ' + str(rbt.get_total()))
+    print('filename =',filename)
+    print('total = ' + str(len(rbt)))
+    print('insert =',insert)
+    print('deleted =',delete)
+    print('miss =',miss)
     print('nb = ' + str(rbt.get_nb()))
     print('bh = ' + str(rbt.get_bh()))
     rbt.inorder_iter()
