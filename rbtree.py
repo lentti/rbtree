@@ -324,12 +324,8 @@ class RBT:
             tree=tree.right
         return cnt
 
-
-
-
-def main():
-    filename='test01.txt'
-    f = open(filename, 'r')
+def printEachFile ( filename ):
+    f = open('./input/'+filename, 'r')
     lines = f.readlines()
     rbt=RBT()
     insert=0
@@ -347,7 +343,7 @@ def main():
                 rbt.delete(number)
                 delete+=1
             else:
-                print("No such Node! ( %d )" % (number))
+                # print("No such Node! ( %d )" % (number))
                 miss+=1
         elif number ==0:
             break
@@ -360,17 +356,16 @@ def main():
     print('nb = ' + str(rbt.get_nb()))
     print('bh = ' + str(rbt.get_bh()))
     rbt.inorder_iter()
+
     f.close()
+
+def main():
+    import os
+    filenames = os.listdir('./input/')
+    for filename in filenames:
+        printEachFile(filename)   
 
     
 if __name__ == '__main__':
     main()
-
-    # rbt=RBT()
-    # rbt.insert(2)
-    # rbt.insert(1)
-    # rbt.insert(5)
-    # rbt.insert(3)
-    # rbt.print()
-    # rbt.delete(rbt.search(5))
-    # rbt.print()
+    
