@@ -8,8 +8,8 @@ class Node:
 
         self.next=None # define a new property to make a Node-Stack
 
-    def __str__(self):
-        return str(self.key)
+    # def __str__(self):
+    #     return str(self.key)
 
 
 class NodeStk:
@@ -66,7 +66,7 @@ class RBT:
     def insert_node(self,z):
         y=self.nil
         x=self.root
-        while x is not self.nil:
+        while x != self.nil:
             y=x
             if z.key < x.key:
                 x=x.left
@@ -154,10 +154,10 @@ class RBT:
             y.p=x.p
             if x.p==self.nil:
                 self.root =y
-            elif x==x.p.left:
-                x.p.left=y
-            else:
+            elif x==x.p.right:
                 x.p.right=y
+            else:
+                x.p.left=y
             y.right=x
             x.p=y
 
@@ -169,8 +169,7 @@ class RBT:
             u.p.left = v
         else:
             u.p.right=v
-        if v!= self.nil:
-            v.p=u.p
+        v.p=u.p
 
     def search(self, key, x = None):
         if None is x:
@@ -219,8 +218,6 @@ class RBT:
             self.delete_fix(x)
             
     def delete_fix(self,x):
-        if x is self.nil:
-            return
         while x != self.root and x.color == 'b':
             if x==x.p.left:
                 w=x.p.right
@@ -325,6 +322,8 @@ class RBT:
         return cnt
 
 def printEachFile ( filename ):
+
+    print('filename =',filename)
     f = open('./input/'+filename, 'r')
     lines = f.readlines()
     rbt=RBT()
@@ -348,7 +347,6 @@ def printEachFile ( filename ):
         elif number ==0:
             break
     # rbt.print()
-    print('filename =',filename)
     print('total = ' + str(len(rbt)))
     print('insert =',insert)
     print('deleted =',delete)
@@ -363,7 +361,7 @@ def main():
     import os
     filenames = os.listdir('./input/')
     for filename in filenames:
-        printEachFile(filename)   
+        printEachFile(filename)  
 
     
 if __name__ == '__main__':
